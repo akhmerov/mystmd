@@ -115,6 +115,9 @@ export type Image = SpecImage & {
   urlOptimized?: string;
   height?: string;
   placeholder?: boolean;
+  label?: string;
+  identifier?: string;
+  html_id?: string;
 };
 
 export type Iframe = Target & {
