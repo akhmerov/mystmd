@@ -1,5 +1,11 @@
 # myst-cli
 
+## 1.6.7
+
+### Patch Changes
+
+- 39570e5: Fix static build inclusion of sitemap
+
 ## 1.6.6
 
 ## 1.6.5
