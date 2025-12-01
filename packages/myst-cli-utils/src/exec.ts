@@ -1,7 +1,16 @@
 import util from 'util';
 import type { ExecOptions } from 'child_process';
 import child_process from 'child_process';
+import treeKill from 'tree-kill';
 import type { Logger } from './types.js';
+
+/**
+ * Kill a process and all of its descendant processes.
+ */
+export function killProcessTree(proc: child_process.ChildProcess): void {
+  if (proc.pid === undefined) return;
+  treeKill(proc.pid);
+}
 
 function execWrapper(
   command: string,
