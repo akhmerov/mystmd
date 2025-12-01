@@ -1,6 +1,7 @@
 import util from 'util';
 import type { ExecOptions } from 'child_process';
 import child_process from 'child_process';
+import treeKill from 'tree-kill';
 import type { Logger } from './types.js';
 
 /**
@@ -8,35 +9,7 @@ import type { Logger } from './types.js';
  */
 export function killProcessTree(proc: child_process.ChildProcess): void {
   if (proc.pid === undefined) return;
-  if (process.platform === 'win32') {
-    try {
-      child_process.execSync(`taskkill /F /T /PID ${proc.pid}`, { stdio: 'ignore' });
-    } catch {
-      // Process may already be dead
-    }
-  } else {
-    killPid(proc.pid);
-  }
-}
-
-function killPid(pid: number): void {
-  // Find and kill children first
-  try {
-    const children = child_process
-      .execSync(`pgrep -P ${pid}`, { encoding: 'utf8' })
-      .trim()
-      .split('\n')
-      .map((p) => parseInt(p, 10))
-      .filter((p) => !isNaN(p));
-    children.forEach((child) => killPid(child));
-  } catch {
-    // No children
-  }
-  try {
-    process.kill(pid);
-  } catch {
-    // Process may already be dead
-  }
+  treeKill(proc.pid);
 }
 
 function execWrapper(
